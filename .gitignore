@@ -1,0 +1,14 @@
+.deps/
+.artifacts/
+**/bin/
+**/obj/
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.log
+*.tmp
+*.bak
+__pycache__/
+.DS_Store

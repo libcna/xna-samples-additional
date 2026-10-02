@@ -1,0 +1,249 @@
+[
+  {
+    "id": "scissor-clipping",
+    "group": "rendering-api",
+    "title": "Scissor Clipping",
+    "requires": [],
+    "status": "verified",
+    "description": "Nested scrolling panels intersect parent and child scissor rectangles. Draw state is restored after the clipping pass.",
+    "controls": "Space pauses scrolling; Up/Down change the shared parameter.",
+    "checks": "Pixel readbacks check the untouched outer corners and the nested parent region."
+  },
+  {
+    "id": "stencil-mask",
+    "group": "rendering-api",
+    "title": "Stencil Mask",
+    "requires": [],
+    "status": "verified",
+    "description": "A circular stencil write pass controls normal/inverted scene masks and an outline pass.",
+    "controls": "Space cycles normal mask, inverse mask and outline.",
+    "checks": "Inside/outside pixels are compared after separate stencil write and test passes."
+  },
+  {
+    "id": "multiple-render-targets",
+    "group": "rendering-api",
+    "title": "Multiple Render Targets",
+    "requires": [
+      "Scene.fxb",
+      "Post.fxb"
+    ],
+    "status": "implemented",
+    "description": "One geometry pass writes independent color, encoded normal and linear depth attachments. Each attachment is displayed.",
+    "controls": "Space cycles the shared mode.",
+    "checks": "Independent attachment readbacks verify a nonuniform depth buffer and distinct color/normal outputs."
+  },
+  {
+    "id": "dynamic-cubemap",
+    "group": "rendering-api",
+    "title": "Dynamic Cubemap",
+    "requires": [],
+    "status": "verified",
+    "description": "Six camera passes capture moving geometry in a RenderTargetCube. EnvironmentMapEffect reflects it on a sphere; six diagnostic faces appear below.",
+    "controls": "Space freezes/resumes cube updates while the scene continues moving.",
+    "checks": "Opposing cube faces differ and the reflected scene contains detailed output."
+  },
+  {
+    "id": "volume-texture",
+    "group": "rendering-api",
+    "title": "Volume Texture",
+    "requires": [
+      "Volume.fxb"
+    ],
+    "status": "implemented",
+    "description": "A real Texture3D stores a generated density field. A shader shows interpolated slices or accumulates 48 samples through the volume.",
+    "controls": "Space toggles slice/volume modes; Up/Down change the slice position.",
+    "checks": "Changing slice depth must change output pixels."
+  },
+  {
+    "id": "deferred-lighting",
+    "group": "advanced-rendering",
+    "title": "Deferred Lighting",
+    "requires": [
+      "Scene.fxb",
+      "Post.fxb"
+    ],
+    "status": "implemented",
+    "description": "A geometry pass writes albedo, normals and depth. A separate fullscreen shader reconstructs world position and sums moving point lights.",
+    "controls": "Space switches lighting/albedo/normals; Up/Down change light count.",
+    "checks": "G-buffer attachments are checked and a different light count must change the rendered image."
+  },
+  {
+    "id": "hdr-tone-mapping",
+    "group": "advanced-rendering",
+    "title": "HDR Tone Mapping",
+    "requires": [
+      "Post.fxb"
+    ],
+    "status": "implemented",
+    "description": "A HalfVector4 target preserves bright values above one. Manual and automatic exposure feed Reinhard/filmic tone mapping, with an LDR clipping reference.",
+    "controls": "Space cycles manual Reinhard, filmic, LDR clipping and automatic exposure; Up/Down adjust exposure.",
+    "checks": "Readback proves HDR values exceed one; changing exposure must affect the tone-mapped image."
+  },
+  {
+    "id": "ambient-occlusion",
+    "group": "advanced-rendering",
+    "title": "Ambient Occlusion",
+    "requires": [
+      "Scene.fxb",
+      "Post.fxb"
+    ],
+    "status": "implemented",
+    "description": "Depth and normals drive a 16-sample screen-space occlusion pass followed by a depth-aware bilateral filter.",
+    "controls": "Space switches composition, filtered AO and raw AO; Up/Down adjust radius.",
+    "checks": "Raw AO must contain both open and occluded regions, and composition must be nonuniform."
+  },
+  {
+    "id": "cascaded-shadow-maps",
+    "group": "advanced-rendering",
+    "title": "Cascaded Shadow Maps",
+    "requires": [
+      "Scene.fxb"
+    ],
+    "status": "implemented",
+    "description": "Three camera-depth intervals get separate directional-light depth maps. A fragment chooses its cascade and evaluates 3x3 PCF shadow comparisons.",
+    "controls": "Space colors cascades; Up/Down adjust shadow bias.",
+    "checks": "Each map must contain geometry; fitted light transforms must be distinct."
+  },
+  {
+    "id": "water-rendering",
+    "group": "advanced-rendering",
+    "title": "Water Rendering",
+    "requires": [
+      "Scene.fxb",
+      "Water.fxb"
+    ],
+    "status": "implemented",
+    "description": "Mirrored and regular camera passes clip geometry on opposite sides of a pool. Animated normals and Fresnel weighting combine reflection and refraction.",
+    "controls": "Space toggles intermediate-target diagnostics; Up/Down adjust wave strength.",
+    "checks": "Reflection and refraction readbacks must differ and contain geometry."
+  },
+  {
+    "id": "terrain-lod",
+    "group": "advanced-rendering",
+    "title": "Terrain LOD",
+    "requires": [],
+    "status": "verified",
+    "description": "Convex terrain tiles choose four mesh densities by distance. Fine boundary vertices interpolate the neighboring coarse edge. Frustum culling and a wireframe view expose the result.",
+    "controls": "Space toggles wireframe; Up/Down adjust camera distance.",
+    "checks": "Pure tests check triangle counts and coincident seams; FNA verifies visible terrain and a reduced triangle count."
+  },
+  {
+    "id": "video-texture",
+    "group": "media-audio",
+    "title": "Video Texture",
+    "requires": [
+      "test-pattern.ogv"
+    ],
+    "status": "verified",
+    "description": "A real VideoPlayer decodes an original generated Theora clip. GetTexture supplies a 2D panel and a perspective 3D screen.",
+    "controls": "Space pauses/resumes; L toggles looping; Up/Down adjust volume.",
+    "checks": "Decoded frames must be varied, playback must advance, and pause/resume states must change."
+  },
+  {
+    "id": "media-library",
+    "group": "media-audio",
+    "title": "Media Library Portable Portion",
+    "requires": [
+      "tone-220.wav",
+      "tone-440.wav"
+    ],
+    "status": "partial",
+    "description": "Local generated songs demonstrate MediaPlayer playback and queue control. The sample reports unavailable system MediaLibrary collections and unavailable FAudio visualization instead of inventing data.",
+    "controls": "Space selects the next song; P pauses/resumes; Up/Down adjust volume.",
+    "checks": "Native playback/queue state is checked. Visualization is checked only if the runtime enables the real API."
+  },
+  {
+    "id": "gamer-profile-friends",
+    "group": "media-audio",
+    "title": "Gamer Profile and Friends",
+    "requires": [],
+    "status": "platform-blocked",
+    "description": "Design only: a real original-XNA Xbox Live provider must supply profile, picture and friend collections. FNA has no operational provider.",
+    "controls": "No portable runtime entry is offered.",
+    "checks": "Requires provider-backed sign-in, asynchronous requests, sign-out cancellation and error checks on a supported original-XNA platform."
+  },
+  {
+    "id": "procedural-audio",
+    "group": "media-audio",
+    "title": "Procedural Audio",
+    "requires": [],
+    "status": "verified",
+    "description": "DynamicSoundEffectInstance consumes generated mono PCM16 sine, square and sawtooth blocks. BufferNeeded maintains a bounded queue and a continuous phase.",
+    "controls": "Space switches waveform; Up/Down change frequency.",
+    "checks": "Waveform checks exercise phase and shape; FNA must consume and refill blocks while the voice remains playing."
+  },
+  {
+    "id": "xact-streaming",
+    "group": "media-audio",
+    "title": "XACT Streaming",
+    "requires": [
+      "streaming.xgs",
+      "streaming.xsb",
+      "Streaming.xwb"
+    ],
+    "status": "partial",
+    "description": "AudioEngine and SoundBank play two looping cues from a real streaming WaveBank. A public cue variable drives a volume RPC, while a Music category controls the mix.",
+    "controls": "Space transitions the added layer over one second; P pauses/resumes; Up/Down change category volume.",
+    "checks": "Native cue state, variable roundtrip and pause/resume are checked. The bank format's streaming flag is also verified."
+  },
+  {
+    "id": "reliable-save-game",
+    "group": "infrastructure",
+    "title": "Reliable Save Game",
+    "requires": [],
+    "status": "verified",
+    "description": "A versioned JSON envelope includes payload integrity and migration. A flushed temporary file atomically replaces the primary; a valid backup recovers corruption.",
+    "controls": "S saves; L loads; C corrupts the primary; F injects pre-replace failure; V writes a legacy save; Up/Down change coins.",
+    "checks": "Roundtrip, interruption preservation, checksum validation, migration and backup recovery are tested in isolated temporary storage."
+  },
+  {
+    "id": "content-streaming",
+    "group": "infrastructure",
+    "title": "Content Streaming",
+    "requires": [],
+    "status": "verified",
+    "description": "Background tasks prepare room pixels. Main-thread uploads are bounded to one per update. Canceled generations are discarded and residency keeps only the current room and neighbors.",
+    "controls": "Space moves forward; Up moves backward.",
+    "checks": "Defined checks wait for CPU tasks, count GPU uploads/disposals and prove bounded residency after room changes."
+  },
+  {
+    "id": "input-rebinding",
+    "group": "infrastructure",
+    "title": "Input Rebinding",
+    "requires": [],
+    "status": "verified",
+    "description": "An action map captures keyboard/gamepad bindings, rejects conflicts, resets defaults and atomically persists JSON.",
+    "controls": "Up/Down select an action; Enter starts capture; Esc cancels capture; S/L save/load; Space restores defaults.",
+    "checks": "Conflict rejection preserves the old binding, reserved exit keys are protected and malformed persisted maps are rejected."
+  },
+  {
+    "id": "game-loop-timing",
+    "group": "infrastructure",
+    "title": "Game Loop Timing",
+    "requires": [],
+    "status": "verified",
+    "description": "Three lanes compare variable integration, fixed updates and interpolation. A simulated render rate and injected stalls expose catch-up limits and dropped time.",
+    "controls": "Space injects a stall; Up/Down adjust simulated frame rate.",
+    "checks": "Ten-second simulations at five render rates preserve distance; interpolation stays bounded and catch-up cannot spiral."
+  },
+  {
+    "id": "rigid-body-physics",
+    "group": "game-algorithms",
+    "title": "Rigid Body Physics",
+    "requires": [],
+    "status": "verified",
+    "description": "Oriented rectangle SAT and convex clipping build two-point manifolds. Iterative accumulated impulses resolve rotation, restitution and Coulomb friction. A pin joint constrains a pendulum.",
+    "controls": "Space spawns a box; Up/Down adjust friction; C toggles contact markers.",
+    "checks": "Tests cover separated/contacting boxes, torque, settling, friction and joint stability; FNA checks finite motion and active contacts."
+  },
+  {
+    "id": "navigation-behavior",
+    "group": "game-algorithms",
+    "title": "Navigation and Behavior",
+    "requires": [],
+    "status": "verified",
+    "description": "Vertical decomposition makes convex free-space polygons around inflated obstacles. Portal adjacency supports A*, then exact segment tests prune corners. A reactive behavior tree chooses chase, remembered search or patrol.",
+    "controls": "Space hides/shows the target; clicking free space moves the target.",
+    "checks": "Routes must preserve obstacle clearance; disconnected regions reject paths; behavior transitions and memory expiry are tested."
+  }
+]

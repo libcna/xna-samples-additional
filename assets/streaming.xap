@@ -1,0 +1,132 @@
+Signature = XACT3;
+Version = 18;
+Content Version = 46;
+Release = February 2010;
+
+Options
+{
+    Verbose Report = 1;
+    Generate C/C++ Headers = 0;
+}
+Global Settings
+{
+    Windows File = streaming.xgs;
+    Xbox File = Xbox\streaming.xgs;
+    Exclude Category Names = 0;
+    Exclude Variable Names = 0;
+    Category
+    {
+        Name = Music;
+        Public = 1;
+        Background Music = 1;
+        Volume = 0;
+        Category Entry { }
+        Instance Limit
+        {
+            Max Instances = 255;
+            Behavior = 0;
+            Crossfade { Fade In = 0; Fade Out = 0; Crossfade Type = 0; }
+        }
+    }
+    Variable
+    {
+        Name = NumCueInstances;
+        Public = 1; Global = 0; Internal = 1; External = 0;
+        Monitored = 1; Reserved = 1; Read Only = 1; Time = 0;
+        Value = 0; Initial Value = 0; Min = 0; Max = 255;
+    }
+    Variable
+    {
+        Name = Intensity;
+        Public = 1; Global = 0; Internal = 0; External = 0;
+        Monitored = 1; Reserved = 0; Read Only = 0; Time = 0;
+        Value = 0; Initial Value = 0; Min = 0; Max = 1;
+    }
+    RPC
+    {
+        Name = LayerVolume;
+        RPC Curve
+        {
+            Name = Sound::Intensity;
+            Property = 0; Sound = 1; Viewable = 1;
+            Variable Entry { Name = Intensity; }
+            RPC Point { X = 0; Y = -9600; Curve = 0; }
+            RPC Point { X = 1; Y = 0; Curve = 0; }
+        }
+    }
+}
+Wave Bank
+{
+    Name = Streaming;
+    Windows File = Streaming.xwb;
+    Xbox File = Xbox\Streaming.xwb;
+    Streaming = 1;
+    Alignment = 2048;
+    Wave { Name = BaseTone; File = tone-220.wav; }
+    Wave { Name = LayerTone; File = tone-440.wav; }
+}
+Sound Bank
+{
+    Name = AdditionalAudio;
+    Windows File = streaming.xsb;
+    Xbox File = Xbox\streaming.xsb;
+    Sound
+    {
+        Name = Base;
+        Volume = 0; Pitch = 0; Priority = 128;
+        Category Entry { Name = Music; }
+        Track
+        {
+            Volume = 0; Use Filter = 0;
+            Play Wave Event
+            {
+                Loop Count = 255; Break Loop = 0;
+                Use Speaker Position = 0; Use Center Speaker = 1;
+                New Speaker Position On Loop = 0;
+                Event Header { Timestamp = 0; Relative = 0; Random Offset = 0; }
+                Wave Entry
+                {
+                    Bank Name = Streaming; Bank Index = 0;
+                    Entry Name = BaseTone; Entry Index = 0;
+                    Weight = 255; Weight Min = 0;
+                }
+            }
+        }
+    }
+    Sound
+    {
+        Name = Layer;
+        Volume = 0; Pitch = 0; Priority = 128;
+        Category Entry { Name = Music; }
+        RPC Entry { RPC Name = LayerVolume; }
+        Track
+        {
+            Volume = 0; Use Filter = 0;
+            Play Wave Event
+            {
+                Loop Count = 255; Break Loop = 0;
+                Use Speaker Position = 0; Use Center Speaker = 1;
+                New Speaker Position On Loop = 0;
+                Event Header { Timestamp = 0; Relative = 0; Random Offset = 0; }
+                Wave Entry
+                {
+                    Bank Name = Streaming; Bank Index = 0;
+                    Entry Name = LayerTone; Entry Index = 1;
+                    Weight = 255; Weight Min = 0;
+                }
+            }
+        }
+    }
+    Cue
+    {
+        Name = Base;
+        Variation { Variation Type = 3; Variation Table Type = 1; New Variation on Loop = 0; }
+        Sound Entry { Name = Base; Index = 0; Weight Min = 0; Weight Max = 255; }
+    }
+    Cue
+    {
+        Name = Layer;
+        Variation { Variation Type = 3; Variation Table Type = 1; New Variation on Loop = 0; }
+        Sound Entry { Name = Layer; Index = 1; Weight Min = 0; Weight Max = 255; }
+    }
+}

@@ -1,0 +1,9 @@
+{
+  "bank": "Streaming",
+  "category": "Music",
+  "variable": "Intensity",
+  "cues": [
+    { "name": "Base", "wave": "tone-220.wav", "rpc": false },
+    { "name": "Layer", "wave": "tone-440.wav", "rpc": true }
+  ]
+}
